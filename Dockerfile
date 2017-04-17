@@ -8,7 +8,7 @@ ENV		JMETER_DOWNLOAD_URL  http://mirror.serversupportforum.de/apache/jmeter/bina
 
 # install needed debian packages & clean up
 RUN		apt-get update && \
-		apt-get install -y --no-install-recommends curl tar ca-certificates unzip && \
+		apt-get install -y --no-install-recommends curl tar ca-certificates unzip ant && \
 		apt-get clean autoclean && \
         	apt-get autoremove --yes && \
         	rm -rf /var/lib/{apt,dpkg,cache,log}/
