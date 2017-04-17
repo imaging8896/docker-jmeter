@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="xslt-report" name="test">
+<property environment="env"/>
+<property name="showData" value="y"/>
+<property name="xml" value=""/>
+<property name="html" value=""/>
+<target name="xslt-report">
+        <tstamp><format property="report.datestamp" pattern="yyyy/MM/dd HH:mm"/></tstamp>
+        <xslt
+            	force="true"
+            	in="${xml}"
+            	out="${html}"
+           	 style="${env.JMETER_HOME}/extras/jmeter-results-detail-report_21.xsl">
+            
+		<param name="showData" expression="${showData}"/>
+            	<param name="titleReport" expression="Test report"/>
+		<param name="dateReport" expression="${report.datestamp}"/>            
+	</xslt>
+ </target>
+</project>

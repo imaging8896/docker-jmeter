@@ -20,6 +20,9 @@ RUN		mkdir -p ${JMETER_HOME} && \
 		unzip -o -d ${JMETER_HOME}/ /tmp/jmeter-plugins-standard.zip && \
 		rm /tmp/jmeter-plugins-standard.zip
 
+# Set ant build.xml
+RUN		cd ${JMETER_HOME} && curl https://raw.githubusercontent.com/imaging8896/docker-jmeter/master/build.xml > build.xml
+
 # Set jmeter property
 RUN		echo log_file= >> ${JMETER_HOME}/bin/jmeter.properties
 
