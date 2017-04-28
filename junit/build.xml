@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="xslt-report" name="test">
+<property name="xml" value=""/>
+<property name="out" value=""/>
+<target name="xslt-report">
+<xslt
+            	force="true"
+            	in="${xml}"
+            	out="${out}"
+           	style="jmeter-results-to-junit.xsl"/>
+</target>
+</project>

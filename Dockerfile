@@ -26,4 +26,10 @@ RUN		cd ${JMETER_HOME} && curl https://raw.githubusercontent.com/imaging8896/doc
 # Set jmeter property
 RUN		echo log_file= >> ${JMETER_HOME}/bin/jmeter.properties
 
+# Add junit report support
+RUN 		mkdir /junit 
+ADD		junit/build.xml /junit
+ADD		junit/jmeter-results-to-junit.xsl /junit
+
+
 WORKDIR		${JMETER_HOME}
