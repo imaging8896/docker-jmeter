@@ -33,3 +33,11 @@ ADD		junit/jmeter-results-to-junit.xsl /junit
 
 
 WORKDIR		${JMETER_HOME}
+
+# install plugin
+RUN curl -L --silent http://jmeter-plugins.org/downloads/file/JMeterPlugins-1.1.0.zip -o /tmp/jmeter-plugins-standard.zip && \
+                mkdir /tmp/plugin && \
+		unzip -o -d /tmp/plugin /tmp/jmeter-plugins-standard.zip && \
+                mv /tmp/plugin/JMeterPlugins.jar ${JMETER_HOME}/lib/. && \
+		rm -rf /tmp/plugin && \
+		rm /tmp/jmeter-plugins-standard.zip
