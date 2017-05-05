@@ -23,7 +23,10 @@ RUN		ln -s ${JMETER_HOME}/bin/jmeter /usr/local/bin/jmeter
 RUN 		wget --directory-prefix=${JMETER_HOME}/lib https://repo1.maven.org/maven2/kg/apc/cmdrunner/2.0/cmdrunner-2.0.jar
 RUN		wget --directory-prefix=${JMETER_HOME}/lib/ext https://repo1.maven.org/maven2/kg/apc/jmeter-plugins-manager/0.12/jmeter-plugins-manager-0.12.jar		
 RUN		java -cp ${JMETER_HOME}/lib/ext/jmeter-plugins-manager-0.12.jar org.jmeterplugins.repository.PluginManagerCMDInstaller
-RUN		${JMETER_HOME}/bin/PluginsManagerCMD.sh install jpgc-json=2.6,jmeter-http=3.1,jmeter-native=3.1,jpgc-prmctl=0.3,jmeter-components=3.1
+
+RUN 		chmod u+x ${JMETER_HOME}/bin/PluginsManagerCMD.sh
+RUN		./${JMETER_HOME}/bin/PluginsManagerCMD.sh install jpgc-prmctl,jpgc-json
+RUN		./${JMETER_HOME}/bin/PluginsManagerCMD.sh status
 
 # Set ant build.xml
 ADD		build.xml /tmp
