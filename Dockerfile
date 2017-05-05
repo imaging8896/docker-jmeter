@@ -3,6 +3,7 @@ FROM	java:8
 ENV		DEBIAN_FRONTEND noninteractive
 
 ENV		JMETER_VERSION	3.1
+ENV		JMETER_PLUGINS_VERSION 1.4.0
 ENV		JMETER_HOME		/opt/jmeter
 ENV		JMETER_DOWNLOAD_URL  http://mirror.serversupportforum.de/apache/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
 
@@ -15,13 +16,18 @@ RUN		apt-get update && \
 
 # download and extract jmeter 
 RUN		mkdir -p ${JMETER_HOME} && \
-		curl -L --silent ${JMETER_DOWNLOAD_URL} | tar -xz --strip=1 -C ${JMETER_HOME} && \
-		curl -L --silent http://jmeter-plugins.org/downloads/file/JMeterPlugins-ExtrasLibs-1.4.0.zip -o /tmp/jmeter-plugins-standard.zip && \
-		unzip -o -d ${JMETER_HOME}/ /tmp/jmeter-plugins-standard.zip && \
-		rm /tmp/jmeter-plugins-standard.zip
+		curl -L --silent ${JMETER_DOWNLOAD_URL} | tar -xz --strip=1 -C ${JMETER_HOME}
+RUN		ln -s ${JMETER_HOME}/bin/jmeter /usr/local/bin/jmeter
+
+# install plugin
+RUN 		wget --directory-prefix=${JMETER_HOME}/lib https://repo1.maven.org/maven2/kg/apc/cmdrunner/2.0/cmdrunner-2.0.jar
+RUN		wget --directory-prefix=${JMETER_HOME}/lib/ext https://repo1.maven.org/maven2/kg/apc/jmeter-plugins-manager/0.12/jmeter-plugins-manager-0.12.jar		
+RUN		java -cp ${JMETER_HOME}/lib/ext/jmeter-plugins-manager-0.12.jar org.jmeterplugins.repository.PluginManagerCMDInstaller
+RUN		${JMETER_HOME}/bin/PluginsManagerCMD.sh install jpgc-json=2.6,jmeter-http=3.1,jmeter-native=3.1,jpgc-prmctl=0.3,jmeter-components=3.1
 
 # Set ant build.xml
-RUN		cd ${JMETER_HOME} && curl https://raw.githubusercontent.com/imaging8896/docker-jmeter/master/build.xml > build.xml
+ADD		build.xml /tmp
+RUN		mkdir /html && mv /tmp/build.xml /html/build.xml
 
 # Set jmeter property
 RUN		echo log_file= >> ${JMETER_HOME}/bin/jmeter.properties
@@ -34,10 +40,3 @@ ADD		junit/jmeter-results-to-junit.xsl /junit
 
 WORKDIR		${JMETER_HOME}
 
-# install plugin
-RUN curl -L --silent http://jmeter-plugins.org/downloads/file/JMeterPlugins-1.1.0.zip -o /tmp/jmeter-plugins-standard.zip && \
-                mkdir /tmp/plugin && \
-		unzip -o -d /tmp/plugin /tmp/jmeter-plugins-standard.zip && \
-                mv /tmp/plugin/JMeterPlugins.jar ${JMETER_HOME}/lib/. && \
-		rm -rf /tmp/plugin && \
-		rm /tmp/jmeter-plugins-standard.zip
