@@ -24,8 +24,9 @@ RUN 		wget --directory-prefix=${JMETER_HOME}/lib https://repo1.maven.org/maven2/
 RUN		wget --directory-prefix=${JMETER_HOME}/lib/ext https://repo1.maven.org/maven2/kg/apc/jmeter-plugins-manager/0.12/jmeter-plugins-manager-0.12.jar		
 RUN		java -cp ${JMETER_HOME}/lib/ext/jmeter-plugins-manager-0.12.jar org.jmeterplugins.repository.PluginManagerCMDInstaller
 
-RUN 		chmod u+x ${JMETER_HOME}/bin/PluginsManagerCMD.sh
-RUN		./${JMETER_HOME}/bin/PluginsManagerCMD.sh install jpgc-prmctl,jpgc-json
+RUN 		wget --directory-prefix=${JMETER_HOME}/lib/ext http://search.maven.org/remotecontent?filepath=kg/apc/jmeter-plugins-json/2.6/jmeter-plugins-json-2.6.jar
+RUN		wget --directory-prefix=${JMETER_HOME}/lib/ext https://search.maven.org/remotecontent?filepath=kg/apc/jmeter-plugins-prmctl/0.3/jmeter-plugins-prmctl-0.3.jar
+#RUN		./${JMETER_HOME}/bin/PluginsManagerCMD.sh install jpgc-prmctl,jpgc-json
 RUN		./${JMETER_HOME}/bin/PluginsManagerCMD.sh status
 
 # Set ant build.xml
